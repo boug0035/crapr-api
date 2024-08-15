@@ -11,21 +11,18 @@ const ImagesService = require("./images.service");
 exports.listAllCrap = async ({ query, lat, long, distance, show_taken }) => {
   const filters = {};
 
-  // Text search for title or description
   if (query)
     filters.$or = [
       { title: { $regex: query, $options: "i" } },
       { description: { $regex: query, $options: "i" } },
     ];
 
-  // Filter by status based on show_taken flag
   if (show_taken === "true") {
     filters.status = { $ne: "FLUSHED" };
   } else {
     filters.status = "AVAILABLE";
   }
 
-  // Geospatial query for proximity
   if (lat && long && distance) {
     filters.location = {
       $near: {
@@ -40,7 +37,7 @@ exports.listAllCrap = async ({ query, lat, long, distance, show_taken }) => {
 
   const crapList = await CrapModel.find(filters)
     .select("-location -buyer -suggestion -__v")
-    .populate("owner", "name -_id"); // Requirement: Populate owner with name only
+    .populate("owner", "name");
 
   return crapList;
 };
@@ -81,7 +78,6 @@ exports.findCrapByUser = async (user) => {
 
 exports.create = async (data, user, files) => {
   try {
-    // Validate the data before any operations
     const tempCrap = new CrapModel({
       ...data,
       owner: user._id,
@@ -89,10 +85,8 @@ exports.create = async (data, user, files) => {
     });
     await tempCrap.validate();
 
-    // Upload the images using the image service
     const imageUrls = await ImagesService.uploadMany(files);
 
-    // Prepare the final crap data with the image URLs
     const crapData = {
       ...data,
       images: imageUrls,
@@ -100,11 +94,9 @@ exports.create = async (data, user, files) => {
       status: "AVAILABLE",
     };
 
-    // Create and save the Crap item
     const crap = new CrapModel(crapData);
     return crap.save();
   } catch (error) {
-    // Handle specific validation errors if needed
     if (error instanceof ValidationError) {
       throw new ValidationError(error.message);
     }
@@ -114,16 +106,13 @@ exports.create = async (data, user, files) => {
 
 exports.replaceCrap = async (crapId, newCrapData, user) => {
   try {
-    // Find the existing Crap item by ID
     const existingCrap = await CrapModel.findById(crapId);
 
     if (!existingCrap) throw new CrapNotFoundError();
 
-    // Check if the user is the owner of the crap item
     if (String(user.id) !== String(existingCrap.owner._id))
       throw new CrapOwnershipError();
 
-    // Replace the existing crap data with the new data
     existingCrap.title = newCrapData.title || existingCrap.title;
     existingCrap.description =
       newCrapData.description || existingCrap.description;
@@ -141,23 +130,19 @@ exports.replaceCrap = async (crapId, newCrapData, user) => {
 
 exports.updateCrap = async (crapId, updates, user) => {
   try {
-    // Find the existing Crap item by ID
     const existingCrap = await CrapModel.findById(crapId);
 
     if (!existingCrap) throw new CrapNotFoundError("Crap not found");
 
-    // Check if the user is the owner of the crap item
     if (String(user.id) !== String(existingCrap.owner._id))
       throw new ForbiddenError(
         "You do not have permission to update this Crap"
       );
 
-    // Update only the provided fields
     Object.keys(updates).forEach((key) => {
       if (key in existingCrap) existingCrap[key] = updates[key];
     });
 
-    // Save the updated crap to the database
     const updatedCrap = await existingCrap.save();
 
     return updatedCrap;
@@ -168,12 +153,10 @@ exports.updateCrap = async (crapId, updates, user) => {
 
 exports.deleteCrap = async (crapId, user) => {
   try {
-    // Find the existing Crap item by ID
     const existingCrap = await CrapModel.findById(crapId);
 
     if (!existingCrap) throw new CrapNotFoundError("Crap not found");
 
-    // Check if the user is the owner of the crap item
     if (String(user.id) !== String(existingCrap.owner._id))
       throw new ForbiddenError(
         "You do not have permission to delete this Crap"
@@ -192,7 +175,6 @@ exports.showInterest = async (crapId, user) => {
 
   if (!crap) throw new CrapNotFoundError();
 
-  // Check if the user is the owner of the crap
   if (String(user._id) === String(crap.owner._id))
     throw new BadRequestError("You cannot show interest in your own crap.");
 

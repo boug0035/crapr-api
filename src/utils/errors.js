@@ -76,7 +76,7 @@ class CrapOwnershipError extends Error {
   ) {
     super(message);
     this.name = "CrapOwnershipError";
-    this.statusCode = 403; // Forbidden
+    this.statusCode = 403;
   }
 }
 
@@ -84,7 +84,7 @@ class ImageUploadError extends Error {
   constructor(message = "Image upload failed") {
     super(message);
     this.name = "ImageUploadError";
-    this.statusCode = 400; // Bad Request
+    this.statusCode = 400;
   }
 }
 

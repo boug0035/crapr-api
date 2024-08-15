@@ -3,7 +3,6 @@
 const { model, Schema } = require("mongoose");
 const { validate } = require("./User.model");
 
-// Embedded Point Schema
 const PointSchema = new Schema({
   type: {
     type: String,
@@ -16,7 +15,6 @@ const PointSchema = new Schema({
   },
 });
 
-// Embedded Suggestion Schema
 const SuggestionSchema = new Schema({
   address: {
     type: String,
@@ -32,7 +30,6 @@ const SuggestionSchema = new Schema({
   },
 });
 
-// Crap Schema
 const CrapSchema = new Schema(
   {
     title: {
@@ -55,10 +52,10 @@ const CrapSchema = new Schema(
     images: {
       type: [String],
       required: true,
-      // validate: [
-      //   (urls) => urls.length > 0,
-      //   "Please provide at least one image",
-      // ],
+      validate: [
+        (urls) => urls.length > 0,
+        "Please provide at least one image",
+      ],
     },
     status: {
       type: String,

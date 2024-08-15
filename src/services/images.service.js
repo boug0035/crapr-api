@@ -1,5 +1,4 @@
 const { Storage } = require("@google-cloud/storage");
-const path = require("path");
 const { ImageUploadError } = require("../utils/errors");
 
 const storage = new Storage({

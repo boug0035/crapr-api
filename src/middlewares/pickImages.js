@@ -4,7 +4,7 @@ const { ImageUploadError } = require("../utils/errors");
 const storage = multer.memoryStorage();
 
 const limits = {
-  fileSize: 5 * 1024 * 1024, // 5 MB
+  fileSize: 5 * 1024 * 1024,
 };
 
 const fileFilter = (req, file, cb) => {
@@ -21,9 +21,3 @@ const attachImages = multer({
 }).array("images", 10);
 
 module.exports = attachImages;
-
-// const multer = require("multer");
-
-// const attachImages = multer().array("images");
-
-// module.exports = attachImages;

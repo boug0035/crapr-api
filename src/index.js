@@ -42,12 +42,10 @@ app.get("/fail", (_req, res) => {
   res.send("Fail");
 });
 
-//Middleware to handle unhandled routes
 app.all("*", (req, res, next) => {
   next(new NotFoundError());
 });
 
-// last on stack
 app.use(globalErrorHandler);
 
 async function startServer() {

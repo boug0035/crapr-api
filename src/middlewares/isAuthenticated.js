@@ -8,9 +8,6 @@ module.exports = isAuthenticated = (req, res, next) => {
     failWithError: true,
   })(req, res, (err) => {
     if (err) {
-      logger.error(
-        `Error in isAuthenticated middleware: (if err) ${err.message}`
-      );
       next(new UnauthenticatedError(err.message));
     }
     next();

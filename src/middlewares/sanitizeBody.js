@@ -11,13 +11,13 @@ const sanitize = (sourceString) => {
 };
 
 const stripTags = (payload) => {
-  const attributes = { ...payload }; // don't mutate the source data
+  const attributes = { ...payload };
   for (const key in attributes) {
     if (Array.isArray(attributes[key])) {
       attributes[key] = attributes[key].map((element) => {
         return typeof element === "object"
-          ? stripTags(element) // if true
-          : sanitize(element); // if false
+          ? stripTags(element)
+          : sanitize(element);
       });
     } else if (attributes[key] instanceof Object) {
       attributes[key] = stripTags(attributes[key]);

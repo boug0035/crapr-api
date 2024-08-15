@@ -26,7 +26,6 @@ const globalErrorHandler = (err, req, res, next) => {
     err instanceof CrapOwnershipError ||
     err instanceof ImageUploadError
   ) {
-    // For known errors, return the specific status code and message
     return res.status(err.statusCode).json({
       error: err.message,
     });
@@ -34,7 +33,6 @@ const globalErrorHandler = (err, req, res, next) => {
 
   logger.error(err);
 
-  // Handling unexpected errors
   const internalError = new InternalServerError();
 
   if (process.env.NODE_ENV === "development") {
