@@ -24,7 +24,7 @@ app.use(morgan("tiny"));
 app.use(sanitizeBody);
 app.use(sanitizeMongo());
 app.use(compression());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(helmet());
 
 app.use("/auth", authRouter);
