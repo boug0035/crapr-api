@@ -48,6 +48,7 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandler);
 
 async function startServer() {
+  logger.info("Starting server...");
   const mongoClient = createMongoClient();
 
   try {
