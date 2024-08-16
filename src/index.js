@@ -7,7 +7,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 const createMongoClient = require("./config/database");
-const { PORT } = require("./config");
 const sanitizeBody = require("./middlewares/sanitizeBody");
 const sanitizeMongo = require("express-mongo-sanitize");
 const logger = require("./utils/logger");
@@ -55,8 +54,8 @@ async function startServer() {
     await mongoClient.connect();
     logger.info("MongoDB connected successfully");
 
-    app.listen(PORT, () => {
-      logger.info(`Server is running on port ${PORT}`);
+    app.listen(process.env.PORT, () => {
+      logger.info(`Server is running on port ${process.env.PORT}`);
     });
   } catch (error) {
     logger.error("Failed to start server", error);
