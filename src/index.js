@@ -33,14 +33,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/success", (_req, res) => {
-  res.send("Success");
-});
-
-app.get("/fail", (_req, res) => {
-  res.send("Fail");
-});
-
 app.all("*", (req, res, next) => {
   next(new NotFoundError());
 });

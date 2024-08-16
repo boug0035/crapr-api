@@ -13,7 +13,7 @@ exports.processGoogleCallback = (user, state) => {
 
   const token = generateJWT(user);
 
-  return `${redirect_url ?? "/success"}?token=${token}`;
+  return `${process.env.FRONTEND_URL}/auth/callback?token=${token}`;
 };
 
 generateJWT = (user) => {

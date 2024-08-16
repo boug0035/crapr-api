@@ -8,6 +8,13 @@ const {
 } = require("../utils/errors");
 const ImagesService = require("./images.service");
 
+function isBuyerOrSeller(user, crap) {
+  return (
+    String(user._id) === String(crap.owner._id) ||
+    (crap.buyer && String(user._id) === String(crap.buyer._id))
+  );
+}
+
 exports.listAllCrap = async ({ query, lat, long, distance, show_taken }) => {
   const filters = {};
 
