@@ -3,3 +3,5 @@ node_modules
 .env
 combined.log
 error.log
+config/google-cloud-storage.json
+google-cloud-storage.json
