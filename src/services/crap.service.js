@@ -80,6 +80,7 @@ exports.create = async (data, user, files) => {
   try {
     const tempCrap = new CrapModel({
       ...data,
+      images: ["temporarly_bypassing_image_validation_by_Raff"],
       owner: user._id,
       status: "AVAILABLE",
     });
